@@ -4,6 +4,7 @@ dotenv.config();
 const cors = require('cors');
 const mongoose = require('mongoose');
 const announcementRoutes = require('./routes/announcementRoutes');
+const quizRoutes = require('./routes/quizRoutes');
 
 // Express app
 const app = express();
@@ -14,6 +15,7 @@ app.use(express.json());
 
 // Routes
 app.use('/api/announcements', announcementRoutes.router);
+app.use('/api/quizzes', quizRoutes.router);
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI)
