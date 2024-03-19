@@ -11,10 +11,6 @@ const app = express();
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use((req, res, next) => {
-  console.log(req.method, req.path);
-  next();
-});
 
 // Routes
 app.use('/api/announcements', announcementRoutes.router);
