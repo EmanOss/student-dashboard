@@ -1,111 +1,52 @@
 import * as React from 'react';
-import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-import MuiDrawer from '@mui/material/Drawer';
+import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
-import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import List from '@mui/material/List';
-import Typography from '@mui/material/Typography';
+import CssBaseline from '@mui/material/CssBaseline';
 import Divider from '@mui/material/Divider';
+import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
-import Badge from '@mui/material/Badge';
-import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
-import Link from '@mui/material/Link';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
 import MenuIcon from '@mui/icons-material/Menu';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import { mainListItems, secondaryListItems } from '../../components/listItems';
-import backgroundImage from '../../assets/images/study-bg.jpg';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import Announcements from '../../components/Announcements';
 import Quizzes from '../../components/Quizzes';
+import { StudentDashboard } from '../../components/StudentDashboard';
+import { Campaign, Dashboard, DriveFileRenameOutline, Logout } from '@mui/icons-material';
 import requireAuth from '../../HOCs/requireAuth';
-import { Button } from '@mui/material';
-import { UseAuthContext } from '../../hooks/UseAuthContext';
-import  { Navigate } from 'react-router-dom'
-import { useNavigate } from 'react-router-dom';
+import { useTheme } from '@mui/material';
+
+const drawerWidth = 240;
 
 
+function HomePage() {
+  const theme = useTheme();
+  const primaryColor = theme.palette.primary.main;
 
-// const baseUrl = process.env.REACT_APP_BACKEND_BASE_URL;
+  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [isClosing, setIsClosing] = React.useState(false);
 
-
-
-function Copyright(props: any) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
-
-const drawerWidth: number = 240;
-
-interface AppBarProps extends MuiAppBarProps {
-  open?: boolean;
-}
-
-const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: (prop) => prop !== 'open',
-})<AppBarProps>(({ theme, open }) => ({
-  zIndex: theme.zIndex.drawer + 1,
-  transition: theme.transitions.create(['width', 'margin'], {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  ...(open && {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  }),
-}));
-
-const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
-  ({ theme, open }) => ({
-    '& .MuiDrawer-paper': {
-      position: 'relative',
-      whiteSpace: 'nowrap',
-      width: drawerWidth,
-      transition: theme.transitions.create('width', {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
-      boxSizing: 'border-box',
-      ...(!open && {
-        overflowX: 'hidden',
-        transition: theme.transitions.create('width', {
-          easing: theme.transitions.easing.sharp,
-          duration: theme.transitions.duration.leavingScreen,
-        }),
-        width: theme.spacing(7),
-        [theme.breakpoints.up('sm')]: {
-          width: theme.spacing(9),
-        },
-      }),
-    },
-  }),
-);
-
-// TODO remove, this demo shouldn't need to reset the theme.
-const defaultTheme = createTheme();
-
-const HomePage = () => {
-  const [open, setOpen] = React.useState(true);
-  const toggleDrawer = () => {
-    setOpen(!open);
+  const handleDrawerClose = () => {
+    setIsClosing(true);
+    setMobileOpen(false);
   };
 
-  const { dispatch } = UseAuthContext();
+  const handleDrawerTransitionEnd = () => {
+    setIsClosing(false);
+  };
+
+  const handleDrawerToggle = () => {
+    if (!isClosing) {
+      setMobileOpen(!mobileOpen);
+    }
+  };
+
+  // const { dispatch } = UseAuthContext();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -118,131 +59,133 @@ const HomePage = () => {
 
     console.log(json);
     if (response.ok) {
-      
-      dispatch({
-        type: 'LOGOUT'
-      })
+
+      // dispatch({
+      //   type: 'LOGOUT'
+      // })
       navigate('/login');
     }
 
   }
 
+  const sideBarLinks = [
+    {
+      text: 'Dashboard',
+      icon: <Dashboard />,
+      path: 'dashboard'
+    },
+    {
+      text: 'Announcements',
+      icon: <Campaign />,
+      path: 'announcements'
+    }
+    , {
+      text: 'Quizzes',
+      icon: <DriveFileRenameOutline />,
+      path: 'quizzes'
+    }];
+
+  const drawer = (
+    <div>
+      <Toolbar sx={{ bgcolor: primaryColor }} />
+      <Divider />
+      <List sx={{ bgcolor: primaryColor }} >
+        {sideBarLinks.map((linkItem) => (
+          <ListItem key={linkItem.text} disablePadding sx={{ '&:hover': { bgcolor: 'white', color: primaryColor }, bgcolor: primaryColor, color: 'white' }}>
+            <ListItemButton onClick={() => navigate(linkItem.path)} >
+              <ListItemIcon sx={{ color: 'inherit' }} >
+                {linkItem.icon}
+              </ListItemIcon>
+              <ListItemText primary={linkItem.text} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+      <Divider />
+      <List sx={{ bgcolor: primaryColor }} >
+        <ListItem key='logout' disablePadding sx={{ '&:hover': { bgcolor: 'white', color: primaryColor }, bgcolor: primaryColor, color: 'white' }}>
+          <ListItemButton onClick={handleLogout}>
+            <ListItemIcon sx={{ color: 'inherit' }} >
+              <Logout />
+            </ListItemIcon>
+            <ListItemText primary="Log out" />
+          </ListItemButton>
+        </ListItem>
+      </List>
+    </div>
+  );
+
   return (
-    <ThemeProvider theme={defaultTheme}>
-      <Box sx={{ display: 'flex' }}>
-        <CssBaseline />
-        <AppBar position="absolute" open={open}>
-          <Toolbar
-            sx={{
-              pr: '24px', // keep right padding when drawer closed
-            }}
+    <Box sx={{ display: 'flex' }}>
+      <CssBaseline />
+      <AppBar
+        position="fixed"
+        sx={{
+          width: { sm: `calc(100% - ${drawerWidth}px)` },
+          ml: { sm: `${drawerWidth}px` },
+        }}
+      >
+        <Toolbar>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            edge="start"
+            onClick={handleDrawerToggle}
+            sx={{ mr: 2, display: { sm: 'none' } }}
           >
-            <IconButton
-              edge="start"
-              color="inherit"
-              aria-label="open drawer"
-              onClick={toggleDrawer}
-              sx={{
-                marginRight: '36px',
-                ...(open && { display: 'none' }),
-              }}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Typography
-              component="h1"
-              variant="h6"
-              color="inherit"
-              noWrap
-              sx={{ flexGrow: 1 }}
-            >
-              Welcome Back!
-            </Typography>
-            <Button variant='contained' color='error' onClick={handleLogout}>
-              Log out
-            </Button>
-          </Toolbar>
-        </AppBar>
-        <Drawer variant="permanent" open={open}>
-          <Toolbar
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'flex-end',
-              px: [1],
-            }}
-          >
-            <IconButton onClick={toggleDrawer}>
-              <ChevronLeftIcon />
-            </IconButton>
-          </Toolbar>
-          <Divider />
-          <List component="nav">
-            {mainListItems}
-            <Divider sx={{ my: 1 }} />
-            {secondaryListItems}
-          </List>
-        </Drawer>
-        <Box
-          component="main"
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" noWrap component="div">
+            Welcome back!
+          </Typography>
+        </Toolbar>
+      </AppBar>
+      <Box
+        component="nav"
+        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+        aria-label="mailbox folders"
+      >
+        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
+        <Drawer
+          variant="temporary"
+          open={mobileOpen}
+          onTransitionEnd={handleDrawerTransitionEnd}
+          onClose={handleDrawerClose}
+          ModalProps={{
+            keepMounted: true, // Better open performance on mobile.
+          }}
           sx={{
-            backgroundColor: (theme) =>
-              theme.palette.mode === 'light'
-                ? theme.palette.grey[100]
-                : theme.palette.grey[900],
-            flexGrow: 1,
-            height: '100vh',
-            overflow: 'auto',
+            display: { xs: 'block', sm: 'none' },
+            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
           }}
         >
-          <Toolbar />
-          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            <Grid container spacing={3}>
-              {/* Top Image */}
-              <Grid item xs={12}>
-                <Paper sx={{
-                  p: 2, display: 'flex', flexDirection: 'column', height: 240,
-                  backgroundPosition: 'center',
-                  backgroundSize: 'cover',
-                  backgroundRepeat: 'no-repeat',
-                  backgroundImage: `url(${backgroundImage})`
-                }}>
-
-                </Paper>
-              </Grid>
-              {/* Announcements */}
-              <Grid item xs={12} md={7} lg={8}>
-                <Paper
-                  sx={{
-                    p: 2,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    minHeight: 240,
-                  }}
-                >
-                  <Announcements />
-                </Paper>
-              </Grid>
-              {/* Quizzes */}
-              <Grid item xs={12} md={5} lg={4}>
-                <Paper
-                  sx={{
-                    p: 2,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    minHeight: 240,
-                  }}
-                >
-                  <Quizzes />
-                </Paper>
-              </Grid>
-            </Grid>
-            <Copyright sx={{ pt: 4 }} />
-          </Container>
-        </Box>
+          {drawer}
+        </Drawer>
+        <Drawer
+          variant="permanent"
+          sx={{
+            display: { xs: 'none', sm: 'block' },
+            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+          }}
+          open
+        >
+          {drawer}
+        </Drawer>
       </Box>
-    </ThemeProvider>
+      <Box
+        component="main"
+        sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
+      >
+        <Toolbar />
+        <Routes>
+          <Route path="" element={<Navigate to="dashboard" />} />
+          <Route path="dashboard" element={<StudentDashboard />} />
+          <Route path="quizzes" element={<Quizzes />} />
+          <Route path="announcements" element={<Announcements />} />
+        </Routes>
+      </Box>
+    </Box>
   );
 }
 
-export default requireAuth(HomePage)
+export default requireAuth(HomePage);
