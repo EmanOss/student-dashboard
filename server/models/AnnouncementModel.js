@@ -6,8 +6,8 @@ const announcementSchema = new Schema({
     required: true
   },
   course:{
-    type: String,
-    required: true
+    type: Schema.Types.ObjectId,
+    ref: 'Course'
   },
   text: {
     type: String,

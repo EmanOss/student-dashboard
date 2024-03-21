@@ -1,10 +1,14 @@
 const Announcement = require('../models/AnnouncementModel');
 const mongoose = require('mongoose');
+const UserModel = require('../models/UserModel');
+const { getCurrentUserId } = require('../utils/getCurrentUserId');
 
-// Get all announcements
+// Get all announcements for logged in user
 const getAllAnnouncements = async (req, res) => {
   try {
-    const allAnnouncements = await Announcement.find({}).sort({ createdAt: -1 });
+    const userId = await getCurrentUserId(req);
+    const user = await UserModel.findById(userId);
+    const allAnnouncements = await Announcement.find({ course: { $in: user.courses } }).sort({ createdAt: -1 });
     return res.status(201).json(allAnnouncements);
   } catch (error) {
     return res.status(400).json({ error: error.message });

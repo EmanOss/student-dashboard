@@ -1,10 +1,14 @@
 const Quiz = require('../models/QuizModel');
 const mongoose = require('mongoose');
+const UserModel = require('../models/UserModel');
+const { getCurrentUserId } = require('../utils/getCurrentUserId');
 
-// Get all quizzes
+// Get all quizzes for logged in user
 const getAllQuizzes = async (req, res) => {
   try {
-    const allQuizzes = await Quiz.find({}).sort({ createdAt: -1 });
+    const userId = await getCurrentUserId(req);
+    const user = await UserModel.findById(userId);
+    const allQuizzes = await Quiz.find({course: { $in: user.courses }}).sort({ createdAt: -1 });
     return res.status(201).json(allQuizzes);
   } catch (error) {
     return res.status(400).json({ error: error.message });

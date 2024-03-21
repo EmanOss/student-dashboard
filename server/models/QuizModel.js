@@ -6,8 +6,8 @@ const quizSchema = new Schema({
     required: true
   },
   course:{
-    type: String,
-    required: true
+    type: Schema.Types.ObjectId,
+    ref: 'Course'
   },
   topic: {
     type: String,

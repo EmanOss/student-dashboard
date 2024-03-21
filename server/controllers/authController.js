@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const User = require('../models/UserModel');
 const jwt = require('jsonwebtoken');
+const Course = require('../models/CourseModel');
 
 const maxAge = 3 * 24 * 60 * 60; // 3 days in seconds
 
@@ -12,12 +13,18 @@ const createToken = (id) => {
 
 // register
 const register = async (req, res) => {
-  const { email, password } = req.body;
-
+  const { firstName, lastName, courses, email, password } = req.body;
   try {
-    const newUser = await User.create({ email, password });
+    const newUser = await User.create({ firstName, lastName, email, password, courses: courses });
     const token = createToken(newUser._id);
     res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
+
+    const coursesToUpdate = await Course.find({ _id: { $in: courses } });
+    const updatedCourses = coursesToUpdate.map(course => {
+      course.students.push(newUser._id);
+      return course.save();
+    });
+    await Promise.all(updatedCourses);
     return res.status(201).json(newUser);
   } catch (error) {
     if (error.name === 'MongoServerError' && error.code === 11000) {
@@ -35,7 +42,7 @@ const login = async (req, res) => {
     const user = await User.login(email, password);
     if (user) {
       const token = createToken(user._id);
-      res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000});
+      res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
       return res.status(200).json({ user: user._id });
     }
   } catch (error) {

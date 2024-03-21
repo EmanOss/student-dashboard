@@ -3,6 +3,14 @@ const bcrypt = require('bcrypt');
 
 const Schema = mongoose.Schema;
 const userSchema = new Schema({
+  firstName: {
+    type: String,
+    required: [true, 'Please enter a first name'],
+  },
+  lastName: {
+    type: String,
+    required: [true, 'Please enter a last name'],
+  },
   email: {
     type: String,
     required: [true, 'Please enter an email'],
@@ -19,7 +27,11 @@ const userSchema = new Schema({
     type: String,
     required: [true, 'Please enter a password'],
     minlength: [6, 'Minimum password length is 6 characters'],
-  }
+  },
+  courses: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Course'
+  }],
 }, { timestamps: true });
 
 // hashing password before saving to database
