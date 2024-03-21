@@ -47,7 +47,6 @@ const deleteCourse = async (req, res) => {
 };
 // Update course by id
 const updateCourse = async (req, res) => {
-  // const { title, course, topic, dueDate } = req.body;
   if (!mongoose.Types.ObjectId.isValid(req.params.id))
     return res.status(404).json({ error: 'No course with that id' });
   const updatedCourse = await Course.findOneAndUpdate(

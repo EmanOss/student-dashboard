@@ -8,7 +8,7 @@ const getAllQuizzes = async (req, res) => {
   try {
     const userId = await getCurrentUserId(req);
     const user = await UserModel.findById(userId);
-    const allQuizzes = await Quiz.find({course: { $in: user.courses }}).sort({ createdAt: -1 });
+    const allQuizzes = await Quiz.find({ course: { $in: user.courses } }).sort({ createdAt: -1 });
     return res.status(201).json(allQuizzes);
   } catch (error) {
     return res.status(400).json({ error: error.message });
@@ -51,7 +51,6 @@ const deleteQuiz = async (req, res) => {
 };
 // Update quiz by id
 const updateQuiz = async (req, res) => {
-  // const { title, course, topic, dueDate } = req.body;
   if (!mongoose.Types.ObjectId.isValid(req.params.id))
     return res.status(404).json({ error: 'No quiz with that id' });
   const updatedQuiz = await Quiz.findOneAndUpdate(

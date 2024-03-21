@@ -51,7 +51,6 @@ const deleteAnnouncement = async (req, res) => {
 };
 // Update announcement by id
 const updateAnnouncement = async (req, res) => {
-  // const { author, course, text } = req.body;
   if (!mongoose.Types.ObjectId.isValid(req.params.id))
     return res.status(404).json({ error: 'No announcement with that id' });
   const updatedAnnouncement = await Announcement.findOneAndUpdate(
