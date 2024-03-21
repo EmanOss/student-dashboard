@@ -21,7 +21,7 @@ const register = async (req, res) => {
     return res.status(201).json(newUser);
   } catch (error) {
     if (error.name === 'MongoServerError' && error.code === 11000) {
-      return res.status(400).json({ error: 'email must be unique' });
+      return res.status(400).json({ error: 'This email is already registered' });
     }
     return res.status(400).json({ error: error.message });
   }
@@ -33,15 +33,32 @@ const login = async (req, res) => {
 
   try {
     const user = await User.login(email, password);
-    if(user){
+    if (user) {
       const token = createToken(user._id);
-      res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
+      res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000});
       return res.status(200).json({ user: user._id });
     }
   } catch (error) {
     return res.status(400).json({ error: error.message });
   }
 };
+
+const isAuthenticated = (req, res) => {
+  const token = req.cookies.jwt;
+
+  if (token) {
+    jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
+      if (err) {
+        return res.status(401).json({ error: 'unauthorized' });
+      } else {
+        const user = await User.findById(decodedToken.id);
+        return res.status(200).json({ user: user._id, email: user.email });
+      }
+    });
+  } else {
+    return res.status(401).json({ error: 'unauthorized' });
+  }
+}
 
 // logout
 const logout = (req, res) => {
@@ -52,5 +69,6 @@ const logout = (req, res) => {
 module.exports = {
   register,
   login,
+  isAuthenticated,
   logout
 };

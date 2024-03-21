@@ -37,9 +37,19 @@ userSchema.statics.login = async function(email, password) {
     if (auth) {
       return user;
     }
-    throw Error('incorrect password');
+    throw Error('Incorrect password');
   }
-  throw Error('incorrect email');
+  throw Error('Incorrect email');
+}
+// static method to register user
+userSchema.statics.register = async function(email, password) {
+  try {
+    const user = new this({ email, password });
+    await user.save();
+    return user;
+  } catch (error) {
+    throw new Error('Failed to register user');
+  }
 }
 
 module.exports = mongoose.model('User', userSchema);
