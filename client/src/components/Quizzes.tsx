@@ -4,7 +4,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
-import { Divider, Typography } from '@mui/material';
+import { Divider, Paper, Typography } from '@mui/material';
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 
 export default function Quizzes() {
@@ -34,20 +34,25 @@ export default function Quizzes() {
 
   return (
 
-    <>
+    <Paper
+      sx={{
+        m: 2,
+        p: 2,
+        display: 'flex',
+        flexDirection: 'column',
+        minHeight: 240,
+      }}
+    >
       <h2>Quizzes</h2>
-      <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+      <List sx={{ width: '100%', maxWidth: '100%', bgcolor: 'background.paper' }}>
         {quizzes && quizzes.map((quiz: any) => (
           <React.Fragment key={quiz._id}>
-            <ListItem>
-              <ListItemAvatar>
-                <Avatar>
-                  <DriveFileRenameOutlineIcon />
-                </Avatar>
-              </ListItemAvatar>
+            <ListItem >
               <ListItemText
                 primary={
-                  <h3>{quiz.title + ' - ' + quiz.course}</h3>}
+                  <Typography variant="h5" component="div">
+                    {quiz.title + ' - ' + quiz.course}
+                  </Typography>}
                 secondary={
                   <React.Fragment>
                     <Typography
@@ -77,6 +82,6 @@ export default function Quizzes() {
           </React.Fragment>
         ))}
       </List>
-    </>
+    </Paper>
   );
 }
