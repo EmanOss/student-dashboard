@@ -8,8 +8,11 @@ import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import { Paper } from "@mui/material"
 import { Announcement } from '../types/Announcement';
+import { withTranslation } from 'react-i18next';
+import { TranslationProps } from '../types/TranslationProps';
 
-export default function Announcements() {
+
+function Announcements({ t }: TranslationProps) {
 
   const baseUrl = process.env.REACT_APP_BACKEND_BASE_URL;
   
@@ -61,7 +64,7 @@ export default function Announcements() {
         minHeight: 240,
       }}
     >
-      <h2>Announcements</h2>
+      <h2>{t('Announcements')}</h2>
       <List sx={{ width: '100%', maxWidth: '100%', bgcolor: 'background.paper' }}>
         {announcements && announcements.map((announcement: any) => (
           <React.Fragment key={announcement._id}>
@@ -102,3 +105,5 @@ export default function Announcements() {
     </Paper>
   );
 }
+
+export default withTranslation()(Announcements);

@@ -8,6 +8,8 @@ import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Chip from '@mui/material/Chip';
 import { Course } from '../types/Course';
+import { TranslationProps } from '../types/TranslationProps';
+import { withTranslation } from 'react-i18next';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -29,7 +31,7 @@ function getStyles(name: string, personName: readonly string[], theme: Theme) {
   };
 }
 
-export default function MultipleSelectChip({ courseList, setCourseList }: { courseList: string[], setCourseList: React.Dispatch<React.SetStateAction<string[]>> }) {
+function MultipleSelectChip({ courseList, setCourseList, t}: { courseList: string[], setCourseList: React.Dispatch<React.SetStateAction<string[]>>, t: TranslationProps['t']}) {
   const theme = useTheme();
   const [allCourses, setAllCourses] = React.useState<Course[]>([]);
   // const [courseListTitles, setCourseListTitles] = React.useState<string[]>([]);
@@ -80,14 +82,14 @@ export default function MultipleSelectChip({ courseList, setCourseList }: { cour
   return (
     <div>
       <FormControl sx={{ width: '100%' }}>
-        <InputLabel id="demo-multiple-chip-label">Courses</InputLabel>
+        <InputLabel id="demo-multiple-chip-label">{t("Courses")}</InputLabel>
         <Select
           labelId="demo-multiple-chip-label"
           id="demo-multiple-chip"
           multiple
           value={courseList}
           onChange={handleChange}
-          input={<OutlinedInput id="select-multiple-chip" label="Courses" />}
+          input={<OutlinedInput id="select-multiple-chip" label={t("Courses")} />}
           renderValue={(selected) => (
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
               {selected.map((value) => (
@@ -111,3 +113,5 @@ export default function MultipleSelectChip({ courseList, setCourseList }: { cour
     </div>
   );
 }
+
+export default withTranslation()(MultipleSelectChip);

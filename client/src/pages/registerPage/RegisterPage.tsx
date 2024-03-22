@@ -11,22 +11,10 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import MultipleSelectChip from '../../components/MultipleSelectChip';
+import { withTranslation } from 'react-i18next';
+import { TranslationProps } from '../../types/TranslationProps';
 
-function Copyright(props: any) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
-
-
-export default function RegisterPage() {
+function RegisterPage({ t, i18n}: TranslationProps) {
   // const { dispatch } = UseAuthContext();
   const [error, setError] = React.useState('');
   const [courseList, setCourseList] = React.useState<string[]>([]);
@@ -84,7 +72,7 @@ export default function RegisterPage() {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign up
+          {t('Sign up')}
         </Typography>
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
@@ -95,7 +83,7 @@ export default function RegisterPage() {
                   required
                   fullWidth
                   id="firstName"
-                  label="First Name"
+                  label={t("First Name")}
                   autoFocus
                 />
               </Grid>
@@ -104,7 +92,7 @@ export default function RegisterPage() {
                   required
                   fullWidth
                   id="lastName"
-                  label="Last Name"
+                  label={t("Last Name")}
                   name="lastName"
                   autoComplete="family-name"
                 />
@@ -114,7 +102,7 @@ export default function RegisterPage() {
                 required
                 fullWidth
                 id="email"
-                label="Email Address"
+                label={t("Email Address")}
                 name="email"
                 autoComplete="email"
               />
@@ -124,7 +112,7 @@ export default function RegisterPage() {
                 required
                 fullWidth
                 name="password"
-                label="Password"
+                label={t("Password")}
                 type="password"
                 id="password"
                 autoComplete="new-password"
@@ -141,18 +129,19 @@ export default function RegisterPage() {
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
           >
-            Sign Up
+            {t('Sign Up')}
           </Button>
           <Grid container justifyContent="center">
             <Grid item>
               <Link href="/login" variant="body2">
-                Already have an account? Sign in
+                {t('Already have an account? Sign in')}
               </Link>
             </Grid>
           </Grid>
         </Box>
       </Box>
-      <Copyright sx={{ mt: 5 }} />
     </Container>
   );
 }
+
+export default withTranslation()(RegisterPage);

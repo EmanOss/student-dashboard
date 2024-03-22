@@ -1,0 +1,22 @@
+{
+  "translation": {
+    "Log in": "Log in",
+    "Email Address": "Email Address",
+    "Password": "Password",
+    "Sign In": "Sign In",
+    "Don't have an account? Sign Up": "Don't have an account? Sign Up",
+    "Sign Up": "Sign Up",
+    "Sign up": "Sign up",
+    "First Name": "First Name",
+    "Last Name": "Last Name",
+    "Courses": "Courses",
+    "Already have an account? Sign in": "Already have an account? Sign in",
+    "Welcome back!": "Welcome back!",
+    "Dashboard": "Dashboard",
+    "Announcements": "Announcements",
+    "Quizzes": "Quizzes",
+    "Log out": "Log out",
+    "Topic": "Topic",
+    "Due": "Due"
+  }
+}
