@@ -7,25 +7,41 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import { Paper } from "@mui/material"
+import { Announcement } from '../types/Announcement';
 
 export default function Announcements() {
 
   const baseUrl = process.env.REACT_APP_BACKEND_BASE_URL;
-
-  const [announcements, setAnnouncements] = React.useState([]);
-
+  
+  const [announcements, setAnnouncements] = React.useState<Announcement[]>([]);
 
   React.useEffect(() => {
+    const getCourseName = async (courseId: string) => {
+      const response = await fetch(`${baseUrl}/api/courses/${courseId}`, { credentials: 'include', });
+      const json = await response.json();
+      if (response.ok) {
+        return json.title;
+      }
+    }
 
     const fetchAnnoucements = async () => {
       const response = await fetch(`${baseUrl}/api/announcements/`, { credentials: 'include', });
       const json = await response.json();
 
       if (response.ok) {
-        setAnnouncements(json);
-        announcements.map((item: any) => {
-          console.log(item.author);
-        })
+        const updatedAnnouncements = json.map(async (item: Announcement) => {
+          item.course = await getCourseName(item.course);
+          return item; 
+        });
+
+        Promise.all(updatedAnnouncements)
+          .then(updatedItems => {
+            setAnnouncements(updatedItems);
+          })
+          .catch(error => {
+            console.error('Error updating course names:', error);
+          });
+
         // dispatch({
         //   type: 'SET_WORKOUTS',
         //   payload: json
@@ -38,7 +54,7 @@ export default function Announcements() {
   return (
     <Paper
       sx={{
-        m:2,
+        m: 2,
         p: 2,
         display: 'flex',
         flexDirection: 'column',

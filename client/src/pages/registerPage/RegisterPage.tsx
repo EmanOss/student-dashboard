@@ -10,6 +10,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import MultipleSelectChip from '../../components/MultipleSelectChip';
 
 function Copyright(props: any) {
   return (
@@ -28,6 +29,7 @@ function Copyright(props: any) {
 export default function RegisterPage() {
   // const { dispatch } = UseAuthContext();
   const [error, setError] = React.useState('');
+  const [courseList, setCourseList] = React.useState<string[]>([]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -35,14 +37,21 @@ export default function RegisterPage() {
     console.log({
       email: data.get('email'),
       password: data.get('password'),
+      
     });
+    console.log('courseList:', courseList);
     try {
       const response = await fetch('/api/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email: data.get('email'), password: data.get('password') }),
+        body: JSON.stringify({ 
+          firstName: data.get('firstName'),
+          lastName: data.get('lastName'),
+          courses: courseList,
+          email: data.get('email'), 
+          password: data.get('password') }),
         credentials: 'include',
       });
 
@@ -79,7 +88,7 @@ export default function RegisterPage() {
         </Typography>
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
-            {/* <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={6}>
                 <TextField
                   autoComplete="given-name"
                   name="firstName"
@@ -99,7 +108,7 @@ export default function RegisterPage() {
                   name="lastName"
                   autoComplete="family-name"
                 />
-              </Grid> */}
+              </Grid>
             <Grid item xs={12}>
               <TextField
                 required
@@ -120,6 +129,9 @@ export default function RegisterPage() {
                 id="password"
                 autoComplete="new-password"
               />
+            </Grid>
+            <Grid item xs={12}>
+              <MultipleSelectChip courseList={courseList} setCourseList={setCourseList} />
             </Grid>
           </Grid>
           <Typography color='error' fontSize={14} >{error}</Typography>

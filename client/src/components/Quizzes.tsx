@@ -6,23 +6,43 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import { Divider, Paper, Typography } from '@mui/material';
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
+import { Quiz } from '../types/Quiz';
 
 export default function Quizzes() {
 
   const baseUrl = process.env.REACT_APP_BACKEND_BASE_URL;
 
-  const [quizzes, setQuizzes] = React.useState([]);
+  const [quizzes, setQuizzes] = React.useState<Quiz[]>([]);
 
 
   React.useEffect(() => {
+    const getCourseName = async (courseId: string) => {
+      const response = await fetch(`${baseUrl}/api/courses/${courseId}`, { credentials: 'include', });
+      const json = await response.json();
+      console.log(json);
+      if (response.ok) {
+        return json.title;
+      }
+    }
 
     const fetchQuizzes = async () => {
-      // const response = await fetch(`${baseUrl}/api/quizzes/`);
       const response = await fetch(`${baseUrl}/api/quizzes/`, { credentials: 'include', });
       const json = await response.json();
 
       if (response.ok) {
-        setQuizzes(json);
+        const updatedAnnouncements = json.map(async (item: Quiz) => {
+          item.course = await getCourseName(item.course);
+          return item;
+        });
+
+        Promise.all(updatedAnnouncements)
+          .then(updatedItems => {
+            setQuizzes(updatedItems);
+          })
+          .catch(error => {
+            console.error('Error updating course names:', error);
+          });
+        // setQuizzes(json);
         // dispatch({
         //   type: 'SET_WORKOUTS',
         //   payload: json
