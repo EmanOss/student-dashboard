@@ -1,0 +1,22 @@
+{
+  "translation": {
+    "Log in": "تسجيل الدخول",
+    "Email Address": "البريد الإلكتروني",
+    "Password": "كلمة المرور",
+    "Sign In": "تسجيل الدخول",
+    "Don't have an account? Sign Up": "ليس لديك حساب؟ سجل",
+    "Sign Up": "سجل",
+    "Sign up": "سجل",
+    "First Name": "الاسم الأول",
+    "Last Name": "الاسم الأخير",
+    "Courses": "المواد",
+    "Already have an account? Sign in": "هل لديك حساب؟ تسجيل الدخول",
+    "Welcome back!": "مرحبًا بك مجددًا!",
+    "Dashboard": "لوحة القيادة",
+    "Announcements": "الإعلانات",
+    "Quizzes": "الإختبارات",
+    "Log out": "تسجيل الخروج",
+    "Topic": "الموضوع",
+    "Due": "الموعد النهائي"
+  }
+}

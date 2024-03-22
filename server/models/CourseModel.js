@@ -3,7 +3,8 @@ const Schema = mongoose.Schema;
 const courseSchema = new Schema({
   title: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
   students: [{
     type: Schema.Types.ObjectId,

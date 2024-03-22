@@ -20,11 +20,14 @@ import { StudentDashboard } from '../../components/StudentDashboard';
 import { Campaign, Dashboard, DriveFileRenameOutline, Logout } from '@mui/icons-material';
 import requireAuth from '../../HOCs/requireAuth';
 import { useTheme } from '@mui/material';
+import { withTranslation } from 'react-i18next';
+import { TranslationProps } from '../../types/TranslationProps';
+
 
 const drawerWidth = 240;
 
 
-function HomePage() {
+function HomePage({ t, i18n }: TranslationProps) {
   const theme = useTheme();
   const primaryColor = theme.palette.primary.main;
 
@@ -46,7 +49,6 @@ function HomePage() {
     }
   };
 
-  // const { dispatch } = UseAuthContext();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -59,10 +61,6 @@ function HomePage() {
 
     console.log(json);
     if (response.ok) {
-
-      // dispatch({
-      //   type: 'LOGOUT'
-      // })
       navigate('/login');
     }
 
@@ -70,17 +68,17 @@ function HomePage() {
 
   const sideBarLinks = [
     {
-      text: 'Dashboard',
+      text: t('Dashboard'),
       icon: <Dashboard />,
       path: 'dashboard'
     },
     {
-      text: 'Announcements',
+      text: t('Announcements'),
       icon: <Campaign />,
       path: 'announcements'
     }
     , {
-      text: 'Quizzes',
+      text: t('Quizzes'),
       icon: <DriveFileRenameOutline />,
       path: 'quizzes'
     }];
@@ -108,7 +106,7 @@ function HomePage() {
             <ListItemIcon sx={{ color: 'inherit' }} >
               <Logout />
             </ListItemIcon>
-            <ListItemText primary="Log out" />
+            <ListItemText primary={t("Log out")} />
           </ListItemButton>
         </ListItem>
       </List>
@@ -136,14 +134,13 @@ function HomePage() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            Welcome back!
+            {t('Welcome back!')}
           </Typography>
         </Toolbar>
       </AppBar>
       <Box
         component="nav"
         sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-        aria-label="mailbox folders"
       >
         {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
         <Drawer
@@ -188,4 +185,4 @@ function HomePage() {
   );
 }
 
-export default requireAuth(HomePage);
+export default withTranslation()(requireAuth(HomePage));

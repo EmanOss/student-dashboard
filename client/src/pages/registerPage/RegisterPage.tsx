@@ -9,25 +9,13 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import MultipleSelectChip from '../../components/MultipleSelectChip';
+import { withTranslation } from 'react-i18next';
+import { TranslationProps } from '../../types/TranslationProps';
 
-function Copyright(props: any) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
-
-
-export default function RegisterPage() {
-  // const { dispatch } = UseAuthContext();
+function RegisterPage({ t, i18n}: TranslationProps) {
   const [error, setError] = React.useState('');
+  const [courseList, setCourseList] = React.useState<string[]>([]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -35,14 +23,21 @@ export default function RegisterPage() {
     console.log({
       email: data.get('email'),
       password: data.get('password'),
+      
     });
+    console.log('courseList:', courseList);
     try {
       const response = await fetch('/api/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email: data.get('email'), password: data.get('password') }),
+        body: JSON.stringify({ 
+          firstName: data.get('firstName'),
+          lastName: data.get('lastName'),
+          courses: courseList,
+          email: data.get('email'), 
+          password: data.get('password') }),
         credentials: 'include',
       });
 
@@ -75,18 +70,18 @@ export default function RegisterPage() {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign up
+          {t('Sign up')}
         </Typography>
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
-            {/* <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={6}>
                 <TextField
                   autoComplete="given-name"
                   name="firstName"
                   required
                   fullWidth
                   id="firstName"
-                  label="First Name"
+                  label={t("First Name")}
                   autoFocus
                 />
               </Grid>
@@ -95,17 +90,17 @@ export default function RegisterPage() {
                   required
                   fullWidth
                   id="lastName"
-                  label="Last Name"
+                  label={t("Last Name")}
                   name="lastName"
                   autoComplete="family-name"
                 />
-              </Grid> */}
+              </Grid>
             <Grid item xs={12}>
               <TextField
                 required
                 fullWidth
                 id="email"
-                label="Email Address"
+                label={t("Email Address")}
                 name="email"
                 autoComplete="email"
               />
@@ -115,11 +110,14 @@ export default function RegisterPage() {
                 required
                 fullWidth
                 name="password"
-                label="Password"
+                label={t("Password")}
                 type="password"
                 id="password"
                 autoComplete="new-password"
               />
+            </Grid>
+            <Grid item xs={12}>
+              <MultipleSelectChip courseList={courseList} setCourseList={setCourseList} />
             </Grid>
           </Grid>
           <Typography color='error' fontSize={14} >{error}</Typography>
@@ -129,18 +127,19 @@ export default function RegisterPage() {
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
           >
-            Sign Up
+            {t('Sign Up')}
           </Button>
           <Grid container justifyContent="center">
             <Grid item>
               <Link href="/login" variant="body2">
-                Already have an account? Sign in
+                {t('Already have an account? Sign in')}
               </Link>
             </Grid>
           </Grid>
         </Box>
       </Box>
-      <Copyright sx={{ mt: 5 }} />
     </Container>
   );
 }
+
+export default withTranslation()(RegisterPage);

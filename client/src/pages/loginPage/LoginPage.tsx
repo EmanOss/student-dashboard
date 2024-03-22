@@ -10,35 +10,18 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { UseAuthContext } from '../../hooks/UseAuthContext';
+import { withTranslation } from 'react-i18next';
+import { TranslationProps } from '../../types/TranslationProps';
 
-function Copyright(props: any) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
-
-// TODO remove, this demo shouldn't need to reset the theme.
-const defaultTheme = createTheme();
-
-export default function LoginPage() {
-  const baseUrl = process.env.REACT_APP_BACKEND_BASE_URL;
-  const { dispatch } = UseAuthContext();
+function LoginPage({ t, i18n }: TranslationProps) {
   const [error, setError] = React.useState('');
-  const [showPassword, setShowPassword] = React.useState(false);
+  // const [showPassword, setShowPassword] = React.useState(false);
 
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  // const handleClickShowPassword = () => setShowPassword((show) => !show);
 
-  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-  };
+  // const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+  //   event.preventDefault();
+  // };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -55,11 +38,10 @@ export default function LoginPage() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ email: data.get('email'), password: data.get('password') }),
-        credentials: 'include', // Include cookies in the request
+        credentials: 'include',
       });
 
       if (response.ok) {
-        dispatch({ type: 'LOGIN' })
         window.location.href = '/';
       } else {
         const errorMessage = await response.json();
@@ -70,9 +52,8 @@ export default function LoginPage() {
       setError('Login failed. Please try again.');
     }
   };
-
+  
   return (
-    <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -87,7 +68,7 @@ export default function LoginPage() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Log in
+            {t('Log in')}
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
@@ -95,7 +76,7 @@ export default function LoginPage() {
               required
               fullWidth
               id="email"
-              label="Email Address"
+              label={t("Email Address")}
               name="email"
               autoComplete="email"
               autoFocus
@@ -105,7 +86,7 @@ export default function LoginPage() {
               required
               fullWidth
               name="password"
-              label="Password"
+              label={t('Password')}
               type="password"
               id="password"
               autoComplete="current-password"
@@ -117,19 +98,19 @@ export default function LoginPage() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign In
+              {t('Sign In')}
             </Button>
             <Grid container justifyContent="center">
               <Grid item >
                 <Link href="/register" variant="body2">
-                  {"Don't have an account? Sign Up"}
+                  {t("Don't have an account? Sign Up")}
                 </Link>
               </Grid>
             </Grid>
           </Box>
         </Box>
-        <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
-    </ThemeProvider>
   );
 }
+
+export default withTranslation()(LoginPage);

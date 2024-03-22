@@ -33,7 +33,7 @@ app.use((req, res, next) => {
 app.use('/api/auth', authRoutes.router);
 app.use('/api/announcements', requireAuth, announcementRoutes.router);
 app.use('/api/quizzes', requireAuth, quizRoutes.router);
-app.use('/api/courses', requireAuth, courseRoutes.router);
+app.use('/api/courses', courseRoutes.router);
 app.use((req, res, next) => {
   res.status(404).send({ message: 'Not Found' });
 });
