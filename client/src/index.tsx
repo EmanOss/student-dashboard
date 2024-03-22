@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { AuthProvider } from './contexts/AuthContext';
 import './i18n.ts';
 
 
@@ -14,9 +13,7 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-      <AuthProvider>
-        <App />
-      </AuthProvider>
+    <App />
   </React.StrictMode>
 );
 

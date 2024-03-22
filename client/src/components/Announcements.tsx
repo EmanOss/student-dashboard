@@ -44,11 +44,6 @@ function Announcements({ t }: TranslationProps) {
           .catch(error => {
             console.error('Error updating course names:', error);
           });
-
-        // dispatch({
-        //   type: 'SET_WORKOUTS',
-        //   payload: json
-        // })
       }
     }
     fetchAnnoucements();

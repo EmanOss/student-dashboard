@@ -49,7 +49,6 @@ function HomePage({ t, i18n }: TranslationProps) {
     }
   };
 
-  // const { dispatch } = UseAuthContext();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -62,10 +61,6 @@ function HomePage({ t, i18n }: TranslationProps) {
 
     console.log(json);
     if (response.ok) {
-
-      // dispatch({
-      //   type: 'LOGOUT'
-      // })
       navigate('/login');
     }
 

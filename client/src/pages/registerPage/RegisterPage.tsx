@@ -9,13 +9,11 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import MultipleSelectChip from '../../components/MultipleSelectChip';
 import { withTranslation } from 'react-i18next';
 import { TranslationProps } from '../../types/TranslationProps';
 
 function RegisterPage({ t, i18n}: TranslationProps) {
-  // const { dispatch } = UseAuthContext();
   const [error, setError] = React.useState('');
   const [courseList, setCourseList] = React.useState<string[]>([]);
 

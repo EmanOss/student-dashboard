@@ -10,12 +10,10 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { UseAuthContext } from '../../hooks/UseAuthContext';
 import { withTranslation } from 'react-i18next';
 import { TranslationProps } from '../../types/TranslationProps';
 
 function LoginPage({ t, i18n }: TranslationProps) {
-  const { dispatch } = UseAuthContext();
   const [error, setError] = React.useState('');
   // const [showPassword, setShowPassword] = React.useState(false);
 
@@ -44,7 +42,6 @@ function LoginPage({ t, i18n }: TranslationProps) {
       });
 
       if (response.ok) {
-        dispatch({ type: 'LOGIN' })
         window.location.href = '/';
       } else {
         const errorMessage = await response.json();
@@ -59,7 +56,6 @@ function LoginPage({ t, i18n }: TranslationProps) {
   return (
       <Container component="main" maxWidth="xs">
         <CssBaseline />
-        {/* <h1>{t('headerTitle')}</h1> */}
         <Box
           sx={{
             marginTop: 8,

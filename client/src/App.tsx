@@ -31,7 +31,7 @@ function App() {
               <Route path="/register" element={<RegisterPage />} />
             </Routes>
             <Box sx={{ position: 'fixed', bottom: '20px', right: '20px', '& > :not(style)': { m: 1 } }}>
-              <Fab color="primary" aria-label="add" onClick={handleChangeLanguage}>
+              <Fab color="primary" aria-label="translate" onClick={handleChangeLanguage}>
                 <Translate />
               </Fab>
             </Box>

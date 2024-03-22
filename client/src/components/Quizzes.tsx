@@ -41,11 +41,6 @@ function Quizzes({ t }: TranslationProps) {
           .catch(error => {
             console.error('Error updating course names:', error);
           });
-        // setQuizzes(json);
-        // dispatch({
-        //   type: 'SET_WORKOUTS',
-        //   payload: json
-        // })
       }
     }
     fetchQuizzes();
