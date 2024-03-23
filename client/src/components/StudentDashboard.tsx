@@ -8,6 +8,7 @@ import backgroundImage from '../assets/images/study-bg.jpg';
 
 export const StudentDashboard = () => {
   return (
+    <div data-testid="dashboard-container">
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
       <Grid container spacing={2}>
         {/* Top Image */}
@@ -31,5 +32,6 @@ export const StudentDashboard = () => {
       </Grid>
       <Copyright sx={{ pt: 4 }} />
     </Container>
+    </div>
   )
 }
